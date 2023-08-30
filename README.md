@@ -1,2 +1,16 @@
-# CookingApp_Flutter
-Application containing recipes from well-known chefs in a pleasant way. The objectives are the possibility to choose the desired recipe based on personal taste, to have an efficient profile, and to manage the diet according to individual choices.
+# flutter_application_1
+
+A new Flutter project.
+
+## Getting Started
+
+This project is a starting point for a Flutter application.
+
+A few resources to get you started if this is your first Flutter project:
+
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
