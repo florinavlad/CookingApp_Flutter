@@ -3,11 +3,43 @@ import 'package:flutter_application_1/constants.dart';
 import 'package:flutter_application_1/models/category.dart';
 import 'package:flutter_application_1/models/category_bundle.dart';
 import 'package:flutter_application_1/size_config.dart';
+import '../services/fetchDishes.dart';
+import 'dishes.dart';
 
 double defaultSize = SizeConfig.defaultSize;
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
+  @override
+  _BodyState createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
   final FocusNode _searchFocusNode = FocusNode();
+  late List<Dish> _dishes = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchDishes().then((dishes) {
+      setState(() {
+        _dishes = dishes;
+      });
+    });
+  }
+
+  String _searchQuery =
+      ''; // Adaugă o variabilă pentru a reține query-ul de căutare
+
+  List<Dish> searchRecipes(String query) {
+    return _dishes.where((dish) {
+      for (var ingredient in dish.ingredients) {
+        if (ingredient.name.toLowerCase().contains(query.toLowerCase())) {
+          return true;
+        }
+      }
+      return false;
+    }).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +54,11 @@ class Body extends StatelessWidget {
                 EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2),
             child: TextField(
                 focusNode: _searchFocusNode,
+                onChanged: (value) {
+                  setState(() {
+                    _searchQuery = value; // Actualizează query-ul de căutare
+                  });
+                },
                 decoration: InputDecoration(
                   hintText: 'Search recipes...',
                   prefixIcon: Icon(Icons.search, color: Colors.grey),
@@ -41,22 +78,36 @@ class Body extends StatelessWidget {
             child: Padding(
               padding:
                   EdgeInsets.symmetric(horizontal: SizeConfig.defaultSize * 2),
-              child: GridView.builder(
-                itemCount: categoryBundles.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount:
-                      SizeConfig.orientation == Orientation.landscape ? 2 : 1,
-                  mainAxisSpacing: 20,
-                  crossAxisSpacing:
-                      SizeConfig.orientation == Orientation.landscape
-                          ? SizeConfig.defaultSize * 2
-                          : 0,
-                  childAspectRatio: 1.6,
-                ),
-                itemBuilder: (context, index) => CategoryBundleCard(
-                  categoryBundle: categoryBundles[index],
-                ),
-              ),
+              child: _searchQuery.isEmpty // Check if search query is empty
+                  ? GridView.builder(
+                      itemCount: categoryBundles.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount:
+                            SizeConfig.orientation == Orientation.landscape
+                                ? 2
+                                : 1,
+                        mainAxisSpacing: 20,
+                        crossAxisSpacing:
+                            SizeConfig.orientation == Orientation.landscape
+                                ? SizeConfig.defaultSize * 2
+                                : 0,
+                        childAspectRatio: 1.6,
+                      ),
+                      itemBuilder: (context, index) => CategoryBundleCard(
+                        categoryBundle: categoryBundles[index],
+                      ),
+                    )
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: searchRecipes(_searchQuery).length,
+                      itemBuilder: (context, index) {
+                        final matchingRecipe =
+                            searchRecipes(_searchQuery)[index];
+                        return ListTile(
+                          title: Text(matchingRecipe.title),
+                        );
+                      },
+                    ),
             ),
           )
         ],

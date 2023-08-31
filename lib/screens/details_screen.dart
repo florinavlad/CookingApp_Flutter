@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import '../models/recipe_details.dart';
-import '../models/recipes.dart';
+import '../models/dish_details.dart';
+import '../models/dishes.dart';
 import '../size_config.dart';
 
 class DetailsScreen extends StatelessWidget {
-  final Recipe recipe;
+  final Dish dish;
   const DetailsScreen({
     required Key key,
-    required this.recipe,
+    required this.dish,
   }) : super(key: key);
 
   @override
@@ -19,7 +18,7 @@ class DetailsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 249, 249, 249),
       appBar: buildAppBar(context, defaultSize),
-      body: RecipeDetails(recipe: recipe, key: UniqueKey()),
+      body: DishDetails(dish: dish, key: UniqueKey()),
     );
   }
 

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/recipes.dart';
+import 'package:flutter_application_1/models/dishes.dart';
 import 'package:flutter_application_1/screens/home_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/dish_card.dart';
-import '../models/dishes.dart';
 import '../services/fetchDishes.dart';
 import '../size_config.dart';
 import 'details_screen.dart';
@@ -26,8 +25,7 @@ class ChefRecipes extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                DetailsScreen(recipe: recipe, key: UniqueKey()),
+            builder: (context) => DetailsScreen(dish: dish, key: UniqueKey()),
           ),
         );
       },
@@ -72,9 +70,20 @@ class ChefRecipes extends StatelessWidget {
                           itemCount: snapshot.data!.length,
                           itemBuilder: (context, index) {
                             Dish dish = snapshot.data![index];
-                            return DishCard(
-                              dish: dish,
-                              key: UniqueKey(),
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DetailsScreen(
+                                        dish: dish, key: UniqueKey()),
+                                  ),
+                                );
+                              },
+                              child: DishCard(
+                                dish: dish,
+                                key: UniqueKey(),
+                              ),
                             );
                           },
                         );

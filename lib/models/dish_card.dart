@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/title.dart';
-
 import '../constants.dart';
 import '../screens/chef_recipes.dart';
 import '../size_config.dart';
@@ -32,12 +30,25 @@ class DishCard extends StatelessWidget {
               child: AspectRatio(
                 aspectRatio: 1,
                 child: Container(
-                  padding: EdgeInsets.all(defaultSize * 3),
+                  padding: EdgeInsets.only(
+                    top: defaultSize * 3,
+                    left: defaultSize * 1,
+                    right: defaultSize * 1,
+                    bottom: defaultSize * 2,
+                  ),
                   color: cardsColor,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      TitleText(key: UniqueKey(), title: dish.title),
+                      Text(
+                        dish.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       SizedBox(height: defaultSize),
                       Text("${dish.subTitle}")
                     ],
@@ -56,7 +67,9 @@ class DishCard extends StatelessWidget {
                   child: FadeInImage.assetNetwork(
                     placeholder: "icons/spinner.gif",
                     image: dish.image,
-                    fit: BoxFit.contain,
+                    fit: BoxFit.scaleDown,
+                    width: 10,
+                    height: 40,
                   ),
                 ),
               ),
