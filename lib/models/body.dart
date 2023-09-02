@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/constants.dart';
 import 'package:flutter_application_1/models/category.dart';
 import 'package:flutter_application_1/models/category_bundle.dart';
+import 'package:flutter_application_1/screens/chef_recipes.dart';
 import 'package:flutter_application_1/size_config.dart';
 import '../services/fetchDishes.dart';
 import 'dishes.dart';
@@ -27,11 +28,16 @@ class _BodyState extends State<Body> {
     });
   }
 
-  String _searchQuery =
-      ''; // Adaugă o variabilă pentru a reține query-ul de căutare
+  String _searchQuery = '';
 
   List<Dish> searchRecipes(String query) {
     return _dishes.where((dish) {
+      if (dish.title.toLowerCase().contains(query.toLowerCase())) {
+        return true;
+      }
+      if (dish.subTitle.toLowerCase().contains(query.toLowerCase())) {
+        return true;
+      }
       for (var ingredient in dish.ingredients) {
         if (ingredient.name.toLowerCase().contains(query.toLowerCase())) {
           return true;
@@ -103,8 +109,21 @@ class _BodyState extends State<Body> {
                       itemBuilder: (context, index) {
                         final matchingRecipe =
                             searchRecipes(_searchQuery)[index];
-                        return ListTile(
-                          title: Text(matchingRecipe.title),
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ChefRecipes(
+                                  recipes: [matchingRecipe],
+                                  chefName: '',
+                                ),
+                              ),
+                            );
+                          },
+                          child: ListTile(
+                            title: Text(matchingRecipe.title),
+                          ),
                         );
                       },
                     ),

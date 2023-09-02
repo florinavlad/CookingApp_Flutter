@@ -7,9 +7,8 @@ import '../size_config.dart';
 class DishDetails extends StatelessWidget {
   final Dish dish;
   const DishDetails({
-    required Key key,
     required this.dish,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

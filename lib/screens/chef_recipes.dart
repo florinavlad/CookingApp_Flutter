@@ -7,15 +7,20 @@ import '../services/fetchDishes.dart';
 import '../size_config.dart';
 import 'details_screen.dart';
 
+List<Dish> filterRecipesByChef(String chefName, List<Dish> recipes) {
+  return recipes.where((recipe) => recipe.chef == chefName).toList();
+}
+
 class ChefRecipes extends StatelessWidget {
   final String chefName;
+  final List<Dish> recipes;
   final TextStyle normalTextStyle = GoogleFonts.euphoriaScript(
     fontSize: 23,
     fontWeight: FontWeight.w500,
     color: Colors.black54,
   );
 
-  ChefRecipes({required this.chefName});
+  ChefRecipes({required this.chefName, required this.recipes});
 
   @override
   Widget build(BuildContext context) {
@@ -67,9 +72,11 @@ class ChefRecipes extends StatelessWidget {
                             mainAxisSpacing: 8.0,
                             childAspectRatio: 0.8,
                           ),
-                          itemCount: snapshot.data!.length,
+                          // itemCount: snapshot.data!.length,
+                          itemCount: recipes.length,
                           itemBuilder: (context, index) {
-                            Dish dish = snapshot.data![index];
+                            // Dish dish = snapshot.data![index];
+                            Dish dish = recipes[index];
                             return GestureDetector(
                               onTap: () {
                                 Navigator.push(

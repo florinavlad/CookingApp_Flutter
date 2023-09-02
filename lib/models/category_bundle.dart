@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/category.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../screens/chef_recipes.dart';
+import '../services/fetchDishes.dart';
 import '../size_config.dart';
+import 'dishes.dart';
 
 double defaultSize = SizeConfig.defaultSize;
 
@@ -13,14 +16,32 @@ class CategoryBundleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
+        print("onTap executed"); // Add this line
         String chefName = categoryBundle.chef;
-        Navigator.pushNamed(
+        print("Chef Name: $chefName");
+        List<Dish> allDishes = await fetchDishes();
+        updateReciepesCount(allDishes);
+        List<Dish> chefRecipes = filterRecipesByChef(chefName, allDishes);
+        print("Filtered Recipes Count: ${chefRecipes.length}");
+        Navigator.push(
           context,
-          '/chefRecipes',
-          arguments: chefName,
+          MaterialPageRoute(
+            builder: (context) =>
+                ChefRecipes(chefName: chefName, recipes: chefRecipes),
+          ),
         );
       },
+
+      // return GestureDetector(
+      //   onTap: () {
+      //     String chefName = categoryBundle.chef;
+      //     Navigator.pushNamed(
+      //       context,
+      //       '/chefRecipes',
+      //       arguments: chefName,
+      //     );
+      //   },
       child: AspectRatio(
         aspectRatio: 1.8,
         child: Container(
@@ -56,7 +77,7 @@ class CategoryBundleCard extends StatelessWidget {
                       Spacer(),
                       buildInfoRow(defaultSize,
                           iconSrc: "icons/pot.svg",
-                          text: "${categoryBundle.ingredients} Recipes"),
+                          text: "${categoryBundle.reciepes} Recipes"),
                       SizedBox(height: defaultSize * 0.5),
                       buildInfoRow(defaultSize,
                           iconSrc: "icons/chef.svg",

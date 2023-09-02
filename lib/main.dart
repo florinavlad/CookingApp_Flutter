@@ -2,14 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/chef_recipes.dart';
 import 'package:flutter_application_1/screens/home_screen.dart';
 import 'package:flutter_application_1/screens/intro_screen.dart';
+import 'package:flutter_application_1/services/fetchDishes.dart';
 import 'package:flutter_application_1/size_config.dart';
 
-void main() {
-  runApp(const MyApp());
+import 'models/category.dart';
+import 'models/dishes.dart';
+
+Future<void> main() async {
+  List<Dish> yourRecipesList = await fetchDishes();
+  updateReciepesCount(yourRecipesList);
+  // for (Dish dish in yourRecipesList) {
+  // print("Dish Name: ${dish.title}");
+  // print("Chef Name: ${dish.chef}");
+  // }
+  runApp(MyApp(yourRecipesList: yourRecipesList));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final List<Dish> yourRecipesList;
+
+  const MyApp({required this.yourRecipesList, Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +40,13 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => IntroScreen(),
         '/home': (context) => HomeScreen(),
-        '/chefRecipes': (context) => ChefRecipes(
-            chefName:
-                ModalRoute.of(context)!.settings.arguments as String? ?? ''),
+        '/chefRecipes': (context) {
+          final chefName =
+              ModalRoute.of(context)!.settings.arguments as String? ?? '';
+          final List<Dish> recipes =
+              filterRecipesByChef(chefName, yourRecipesList);
+          return ChefRecipes(chefName: chefName, recipes: recipes);
+        }
       },
     );
   }

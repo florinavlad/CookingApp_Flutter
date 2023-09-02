@@ -18,7 +18,7 @@ class DetailsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 249, 249, 249),
       appBar: buildAppBar(context, defaultSize),
-      body: DishDetails(dish: dish, key: UniqueKey()),
+      body: DishDetails(dish: dish),
     );
   }
 

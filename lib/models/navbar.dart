@@ -31,6 +31,7 @@ class NavigationProvider with ChangeNotifier {
       icon: "icons/chef.svg",
       destination: ChefRecipes(
         chefName: '',
+        recipes: [],
       ),
     ),
   ];
